@@ -1,5 +1,9 @@
 package com.example.library.entity;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.time.LocalDate;
 
 /**
@@ -7,6 +11,8 @@ import java.time.LocalDate;
  */
 public class BorrowRecord {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long userId; // foreign key to User
     private long bookId; // foreign key to Book
