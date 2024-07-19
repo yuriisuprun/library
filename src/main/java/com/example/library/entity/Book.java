@@ -24,4 +24,5 @@ public class Book {
     private LocalDate publishedDate;
     private String isbn;
     private int availableCopies;
+    private boolean available;
 }
