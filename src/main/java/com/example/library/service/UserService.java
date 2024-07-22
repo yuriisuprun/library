@@ -1,7 +1,7 @@
 package com.example.library.service;
 
 import com.example.library.entity.User;
-import com.example.repository.UserRepository;
+import com.example.library.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

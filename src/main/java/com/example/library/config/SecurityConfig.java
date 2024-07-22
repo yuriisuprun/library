@@ -1,29 +1,23 @@
 package com.example.library.config;
 
-/**
- * @author Yurii_Suprun
- */
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.library.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.Customizer;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final UserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public SecurityConfig(UserDetailsService customUserDetailsService) {
+    public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
         this.customUserDetailsService = customUserDetailsService;
     }
 
@@ -36,7 +30,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/**").hasAuthority("LIBRARIAN")
                         .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults());  // Use basic authentication with defaults
+                .httpBasic(Customizer.withDefaults())  // Use basic authentication with defaults
+                .userDetailsService(customUserDetailsService); // Set UserDetailsService
 
         return http.build();
     }
@@ -44,10 +39,5 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    @Autowired
-    public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(customUserDetailsService).passwordEncoder(passwordEncoder());
     }
 }
